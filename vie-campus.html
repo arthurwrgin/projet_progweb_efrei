@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Découvrez la vie étudiante au département d'Informatique de l'EFREI : campus, associations, labs, projets étudiants et témoignages alumni.">
+    <title>Vie de campus · Département Informatique EFREI</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800;900&amp;family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* === VIE CAMPUS — styles spécifiques === */
+        .campus-hero {
+            position: relative;
+            min-height: 85vh;
+            background: var(--blue-900);
+            display: flex;
+            align-items: flex-end;
+            overflow: hidden;
+        }
+        .campus-hero-img {
+            position: absolute;
+            inset: 0;
+            background: url('assets/campus-hero.jpg') center/cover no-repeat;
+            opacity: 0.35;
+        }
+        .campus-hero-img::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(10,31,92,0.2) 0%, rgba(10,31,92,0.85) 70%, var(--blue-900) 100%);
+        }
+        .campus-hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 var(--padding-x) 5rem;
+            width: 100%;
+        }
+        .campus-hero-content h1 {
+            font-size: clamp(3rem, 10vw, 8rem);
+            color: var(--cream);
+            line-height: 0.88;
+            margin-bottom: 1.5rem;
+            animation: fadeUp 0.8s var(--ease) 0.2s both;
+        }
+        .campus-hero-content h1 em {
+            color: var(--yellow);
+            font-family: var(--font-serif);
+            font-style: italic;
+            font-weight: 300;
+            text-transform: lowercase;
+        }
+        .campus-hero-content .lead {
+            color: rgba(250,250,247,0.7);
+            max-width: 580px;
+            line-height: 1.8;
+            animation: fadeUp 0.8s var(--ease) 0.4s both;
+        }
+
+        /* Navigation interne */
+        .campus-nav {
+            background: var(--white);
+            border-bottom: 1px solid var(--grey-200);
+            position: sticky;
+            top: 60px;
+            z-index: 50;
+            overflow-x: auto;
+        }
+        .campus-nav-inner {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 var(--padding-x);
+            display: flex;
+            gap: 0;
+        }
+        .campus-nav a {
+            padding: 1.25rem 1.5rem;
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--grey-600);
+            white-space: nowrap;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s var(--ease);
+        }
+        .campus-nav a:hover, .campus-nav a.active {
+            color: var(--blue-900);
+            border-bottom-color: var(--yellow);
+        }
+
+        /* Chiffres clés campus */
+        .campus-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0;
+            background: var(--cream);
+        }
+        .campus-stat {
+            padding: 3rem 2rem;
+            text-align: center;
+            border-right: 1px solid var(--grey-200);
+        }
+        .campus-stat:last-child { border-right: none; }
+        .campus-stat-num {
+            font-family: var(--font-display);
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 800;
+            color: var(--blue-900);
+            line-height: 1;
+            margin-bottom: 0.5rem;
+        }
+        .campus-stat-num span { color: var(--yellow); }
+        .campus-stat-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--grey-600);
+            font-weight: 600;
+        }
+        @media (max-width: 700px) {
+            .campus-stats { grid-template-columns: repeat(2, 1fr); }
+            .campus-stat { border-bottom: 1px solid var(--grey-200); }
+        }
+
+        /* Section image + texte côte à côte */
+        .campus-split {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+            align-items: stretch;
+            min-height: 500px;
+        }
+        .campus-split.reverse { direction: rtl; }
+        .campus-split.reverse > * { direction: ltr; }
+        .campus-split-img {
+            background: var(--blue-700);
+            min-height: 400px;
+            position: relative;
+            overflow: hidden;
+        }
+        .campus-split-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .campus-split-img .placeholder-visual {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-display);
+            font-size: 8rem;
+            color: rgba(255,255,255,0.06);
+        }
+        .campus-split-text {
+            padding: clamp(2.5rem, 5vw, 5rem);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .campus-split-text .eyebrow { margin-bottom: 1.5rem; }
+        .campus-split-text h2 { margin-bottom: 1.5rem; }
+        .campus-split-text p {
+            color: var(--grey-600);
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+        }
+        .campus-split--dark .campus-split-text {
+            background: var(--blue-900);
+            color: var(--cream);
+        }
+        .campus-split--dark .campus-split-text h2 { color: var(--cream); }
+        .campus-split--dark .campus-split-text p { color: rgba(250,250,247,0.65); }
+        @media (max-width: 800px) {
+            .campus-split, .campus-split.reverse { grid-template-columns: 1fr; direction: ltr; }
+            .campus-split-img { min-height: 280px; }
+        }
+
+        /* Grille associations améliorée */
+        .asso-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.25rem;
+        }
+        .asso-card {
+            background: var(--white);
+            border-radius: var(--radius-md);
+            padding: 2.25rem;
+            border: 1px solid var(--grey-200);
+            transition: all 0.5s var(--ease);
+            position: relative;
+            overflow: hidden;
+        }
+        .asso-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--blue-900), var(--yellow));
+            transform: scaleX(0);
+            transition: transform 0.4s var(--ease);
+        }
+        .asso-card:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-xl);
+            border-color: transparent;
+        }
+        .asso-card:hover::before { transform: scaleX(1); }
+        .asso-card-emoji {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+        .asso-card h4 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            color: var(--blue-900);
+        }
+        .asso-card p {
+            font-size: 0.88rem;
+            color: var(--grey-600);
+            line-height: 1.7;
+        }
+        .asso-card-tag {
+            display: inline-block;
+            margin-top: 1rem;
+            padding: 0.25rem 0.75rem;
+            background: var(--cream);
+            border-radius: var(--radius-xl);
+            font-size: 0.62rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            font-weight: 700;
+            color: var(--blue-900);
+        }
+        @media (max-width: 800px) { .asso-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 500px) { .asso-grid { grid-template-columns: 1fr; } }
+
+        /* Témoignages */
+        .temoignage-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+        .temoignage-card {
+            padding: 2.5rem;
+            background: var(--blue-800);
+            border-radius: var(--radius-md);
+            transition: all 0.4s var(--ease);
+        }
+        .temoignage-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        .temoignage-card p {
+            color: rgba(250,250,247,0.85);
+            font-size: 1rem;
+            line-height: 1.8;
+            max-width: none;
+            margin-bottom: 2rem;
+        }
+        .temoignage-card p::before {
+            content: '«\00a0';
+            color: var(--yellow);
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+        }
+        .temoignage-card p::after { content: '\00a0»'; color: var(--yellow); font-family: var(--font-display); font-size: 1.5rem; }
+        @media (max-width: 700px) { .temoignage-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+
+    <a class="skip-link" href="#main">Aller au contenu</a>
+
+    <header class="site-header on-dark">
+        <a href="index.html" class="logo" aria-label="EFREI · Accueil">
+            <img src="assets/efrei-logo.png" alt="Logo EFREI · Paris Panthéon-Assas Université">
+        </a>
+        <button class="menu-toggle" aria-label="Ouvrir le menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+        <nav class="main-nav" aria-label="Navigation principale">
+            <ul>
+                <li><a class="nav-link" href="index.html">Accueil</a></li>
+                <li><a class="nav-link" href="formations.html">Formations</a></li>
+                <li><a class="nav-link" href="equipe.html">Équipe</a></li>
+                <li><a class="nav-link active" href="vie-campus.html">Vie de campus</a></li>
+                <li><a class="nav-link" href="contact.html">Contact</a></li>
+                <li><a class="nav-link nav-cta" href="contact.html#admission">Candidater</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main id="main">
+
+        <!-- ===== HERO ===== -->
+        <section class="campus-hero">
+            <div class="campus-hero-img" aria-hidden="true"></div>
+            <div class="hero-decorative" aria-hidden="true"></div>
+            <div class="campus-hero-content">
+                <span class="eyebrow" style="margin-bottom:1.5rem;">Vie étudiante · EFREI</span>
+                <h1>Une vie étudiante<br><em>pour s'épanouir.</em></h1>
+                <p class="lead">À l'EFREI, la vie étudiante rime avec engagement, créativité et réussite. Campus dynamique, vie associative riche, accompagnement complet.</p>
+            </div>
+        </section>
+
+        <!-- ===== NAV INTERNE ===== -->
+        <nav class="campus-nav" aria-label="Navigation de la page">
+            <div class="campus-nav-inner">
+                <a href="#campus">Campus</a>
+                <a href="#associations">Associations</a>
+                <a href="#labs">Labs & Innovation</a>
+                <a href="#projets">Projets</a>
+                <a href="#alumni">Alumni</a>
+            </div>
+        </nav>
+
+        <!-- ===== CHIFFRES CLÉS ===== -->
+        <section class="campus-stats">
+            <div class="campus-stat reveal">
+                <div class="campus-stat-num">6 000</div>
+                <div class="campus-stat-label">étudiants</div>
+            </div>
+            <div class="campus-stat reveal">
+                <div class="campus-stat-num"><span>+</span>65</div>
+                <div class="campus-stat-label">associations & clubs</div>
+            </div>
+            <div class="campus-stat reveal">
+                <div class="campus-stat-num">2 000</div>
+                <div class="campus-stat-label">entreprises partenaires</div>
+            </div>
+            <div class="campus-stat reveal">
+                <div class="campus-stat-num">2</div>
+                <div class="campus-stat-label">campus</div>
+            </div>
+        </section>
+
+        <!-- ===== CAMPUS ===== -->
+        <section id="campus">
+            <div class="campus-split">
+                <div class="campus-split-img">
+                    <img src="assets/campus-2.jpg" alt="Campus EFREI Paris Villejuif - vue d'ensemble">
+                </div>
+                <div class="campus-split-text">
+                    <span class="eyebrow">Nos campus</span>
+                    <h2>Paris &amp; Bordeaux,<br><em>au cœur de l'innovation.</em></h2>
+                    <p>Installés dans le Grand Paris et à Bordeaux, nos campus offrent un cadre d'apprentissage innovant et moderne. Fablabs, laboratoires de recherche, espaces de création et de coworking : nos infrastructures vous aident à grandir et à vous challenger.</p>
+                    <a href="contact.html" class="btn btn-dark" style="align-self:flex-start;">Visiter le campus <span class="btn-arrow">→</span></a>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== ASSOCIATIONS ===== -->
+        <section class="section" id="associations">
+            <div class="container">
+                <div class="section-header reveal">
+                    <div class="section-header-text">
+                        <span class="eyebrow">Vie associative</span>
+                        <h2>Une vie associative riche<br><em>pour agir, créer et s'épanouir.</em></h2>
+                        <p>Plus de 60 associations étudiantes proposent des activités extrascolaires. Autant de moyens pour grandir, apprendre à communiquer, monter un projet et travailler en équipe.</p>
+                    </div>
+                </div>
+
+                <!-- Chiffres assos -->
+                <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid var(--grey-200);border-radius:var(--radius-md);margin-bottom:3rem;" class="reveal">
+                    <div style="padding:2rem 1.5rem;text-align:center;border-right:1px solid var(--grey-200);">
+                        <div style="font-family:var(--font-display);font-size:2.5rem;font-weight:800;color:var(--blue-900);line-height:1;">+65</div>
+                        <div style="font-size:0.72rem;text-transform:uppercase;letter-spacing:0.14em;color:var(--grey-600);font-weight:600;margin-top:0.5rem;">Associations & clubs</div>
+                    </div>
+                    <div style="padding:2rem 1.5rem;text-align:center;border-right:1px solid var(--grey-200);">
+                        <div style="font-family:var(--font-display);font-size:2.5rem;font-weight:800;color:var(--blue-900);line-height:1;">+20</div>
+                        <div style="font-size:0.72rem;text-transform:uppercase;letter-spacing:0.14em;color:var(--grey-600);font-weight:600;margin-top:0.5rem;">Associations sportives</div>
+                    </div>
+                    <div style="padding:2rem 1.5rem;text-align:center;border-right:1px solid var(--grey-200);">
+                        <div style="font-family:var(--font-display);font-size:2.5rem;font-weight:800;color:var(--blue-900);line-height:1;">+100</div>
+                        <div style="font-size:0.72rem;text-transform:uppercase;letter-spacing:0.14em;color:var(--grey-600);font-weight:600;margin-top:0.5rem;">Événements par an</div>
+                    </div>
+                    <div style="padding:2rem 1.5rem;text-align:center;">
+                        <div style="font-family:var(--font-display);font-size:2.5rem;font-weight:800;color:var(--blue-900);line-height:1;">+8 500</div>
+                        <div style="font-size:0.72rem;text-transform:uppercase;letter-spacing:0.14em;color:var(--grey-600);font-weight:600;margin-top:0.5rem;">Actions valorisées</div>
+                    </div>
+                </div>
+
+                <!-- Catégories d'associations -->
+                <h3 class="reveal" style="margin-bottom:2rem;font-size:1.5rem;">Nos pôles associatifs</h3>
+
+                <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;">
+
+                    <div class="reveal" style="padding:2rem;background:var(--blue-900);border-radius:var(--radius-md);color:var(--cream);">
+                        <div style="font-size:0.68rem;text-transform:uppercase;letter-spacing:0.18em;color:var(--yellow);font-weight:700;margin-bottom:1rem;">Bureau des Étudiants</div>
+                        <h4 style="color:var(--cream);font-size:1.3rem;margin-bottom:0.75rem;">BDE · Sepefrei</h4>
+                        <p style="font-size:0.88rem;color:rgba(250,250,247,0.65);line-height:1.7;max-width:none;">L'association centrale qui organise les événements majeurs : WEI, Gala, soirées d'intégration, Forum des Associations et vie quotidienne du campus.</p>
+                    </div>
+
+                    <div class="reveal" style="padding:2rem;background:var(--cream);border-radius:var(--radius-md);border:1px solid var(--grey-200);">
+                        <div style="font-size:0.68rem;text-transform:uppercase;letter-spacing:0.18em;color:var(--yellow);font-weight:700;margin-bottom:1rem;">Sport</div>
+                        <h4 style="font-size:1.3rem;margin-bottom:0.75rem;">BDS · Bureau des Sports</h4>
+                        <p style="font-size:0.88rem;color:var(--grey-600);line-height:1.7;">Football, basketball, rugby, badminton, escalade, musculation… Plus de 20 sections sportives et des tournois inter-écoles toute l'année.</p>
+                    </div>
+
+                    <div class="reveal" style="padding:2rem;background:var(--cream);border-radius:var(--radius-md);border:1px solid var(--grey-200);">
+                        <div style="font-size:0.68rem;text-transform:uppercase;letter-spacing:0.18em;color:var(--yellow);font-weight:700;margin-bottom:1rem;">Arts & Culture</div>
+                        <h4 style="font-size:1.3rem;margin-bottom:0.75rem;">BDA · Bureau des Arts</h4>
+                        <p style="font-size:0.88rem;color:var(--grey-600);line-height:1.7;">Musique, théâtre, photo, vidéo, dessin. Le BDA organise aussi des sorties culturelles et des expositions sur le campus.</p>
+                    </div>
+
+                    <div class="reveal" style="padding:2rem;background:var(--cream);border-radius:var(--radius-md);border:1px solid var(--grey-200);">
+                        <div style="font-size:0.68rem;text-transform:uppercase;letter-spacing:0.18em;color:var(--yellow);font-weight:700;margin-bottom:1rem;">Tech</div>
+                        <h4 style="font-size:1.3rem;margin-bottom:0.75rem;">Clubs tech & cyber</h4>
+                        <p style="font-size:0.88rem;color:var(--grey-600);line-height:1.7;">Programmation compétitive, challenges CTF, robotique, IA, e-sport. Des clubs pour coder, hacker et créer au-delà des cours.</p>
+                    </div>
+
+                    <div class="reveal" style="padding:2rem;background:var(--cream);border-radius:var(--radius-md);border:1px solid var(--grey-200);">
+                        <div style="font-size:0.68rem;text-transform:uppercase;letter-spacing:0.18em;color:var(--yellow);font-weight:700;margin-bottom:1rem;">Solidarité</div>
+                        <h4 style="font-size:1.3rem;margin-bottom:0.75rem;">Efrei for Good</h4>
+                        <p style="font-size:0.88rem;color:var(--grey-600);line-height:1.7;">Projets solidaires, ateliers numériques pour les associations locales, actions DD&RS et engagement citoyen.</p>
+                    </div>
+
+                    <div class="reveal" style="padding:2rem;background:var(--cream);border-radius:var(--radius-md);border:1px solid var(--grey-200);">
+                        <div style="font-size:0.68rem;text-transform:uppercase;letter-spacing:0.18em;color:var(--yellow);font-weight:700;margin-bottom:1rem;">International</div>
+                        <h4 style="font-size:1.3rem;margin-bottom:0.75rem;">Clubs internationaux</h4>
+                        <p style="font-size:0.88rem;color:var(--grey-600);line-height:1.7;">African Day, Asian Day, journées culturelles… Des clubs qui célèbrent la diversité et préparent les échanges à l'international.</p>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== LABS & INNOVATION ===== -->
+        <section id="labs">
+            <div class="campus-split campus-split--dark reverse">
+                <div class="campus-split-img">
+                    <img src="assets/campus-hero.jpg" alt="Campus EFREI - #OnlyEfreiParis">
+                </div>
+                <div class="campus-split-text">
+                    <span class="eyebrow">Innovation Lab</span>
+                    <h2>Des espaces dédiés<br><em>à la création.</em></h2>
+                    <p>Nos FabLabs rassemblent étudiants, encadrants et professionnels autour de la collaboration et de l'expérimentation. Labs GPU, salle cyber isolée, hardware lab avec imprimantes 3D et microcontrôleurs.</p>
+                    <div style="display:flex; flex-wrap:wrap; gap:0.5rem; margin-top:0.5rem;">
+                        <span style="padding:0.35rem 0.85rem; background:rgba(255,255,255,0.08); border-radius:20px; font-size:0.72rem; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:rgba(250,250,247,0.7);">Lab IA</span>
+                        <span style="padding:0.35rem 0.85rem; background:rgba(255,255,255,0.08); border-radius:20px; font-size:0.72rem; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:rgba(250,250,247,0.7);">Lab Cyber</span>
+                        <span style="padding:0.35rem 0.85rem; background:rgba(255,255,255,0.08); border-radius:20px; font-size:0.72rem; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:rgba(250,250,247,0.7);">Hardware</span>
+                        <span style="padding:0.35rem 0.85rem; background:rgba(255,255,255,0.08); border-radius:20px; font-size:0.72rem; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:rgba(250,250,247,0.7);">Coworking</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== PROJETS ÉTUDIANTS ===== -->
+        <section class="section" id="projets">
+            <div class="container">
+                <div class="section-header reveal">
+                    <div class="section-header-text">
+                        <span class="eyebrow">Projets étudiants</span>
+                        <h2>Quelques<br><em>réalisations marquantes.</em></h2>
+                        <p>Sélection de projets de fin d'études, hackathons et projets associatifs.</p>
+                    </div>
+                </div>
+
+                <div class="projects-grid reveal">
+                    <article class="project-item">
+                        <div class="project-cat">PFE 2025 · IA</div>
+                        <h3>NeuroVision</h3>
+                        <p>Détection précoce de pathologies oculaires par deep learning sur images de fond d'œil. Partenariat hôpital Cochin.</p>
+                        <div class="project-meta">
+                            <span><strong>Équipe :</strong> 4 étudiants</span>
+                            <span><strong>Tech :</strong> PyTorch · FastAPI</span>
+                        </div>
+                    </article>
+                    <article class="project-item">
+                        <div class="project-cat">Hackathon · 2025</div>
+                        <h3>EcoRoute</h3>
+                        <p>Application mobile de calcul d'itinéraires multimodaux optimisés pour l'empreinte carbone. 1<sup>er</sup> prix Hackathon Île-de-France.</p>
+                        <div class="project-meta">
+                            <span><strong>Équipe :</strong> 6 étudiants</span>
+                            <span><strong>Tech :</strong> React Native · Node</span>
+                        </div>
+                    </article>
+                    <article class="project-item">
+                        <div class="project-cat">PFE 2024 · Cybersécurité</div>
+                        <h3>Honeycomb-IDS</h3>
+                        <p>Système de détection d'intrusion auto-apprenant à base de honeypots distribués. Open-sourcé sous licence MIT.</p>
+                        <div class="project-meta">
+                            <span><strong>Équipe :</strong> 3 étudiants</span>
+                            <span><strong>Tech :</strong> Go · Kafka · ML</span>
+                        </div>
+                    </article>
+                    <article class="project-item">
+                        <div class="project-cat">Asso · 2025</div>
+                        <h3>Campus Map</h3>
+                        <p>Application web de réservation de salles et visualisation 3D du campus. Utilisée quotidiennement par 1 800 étudiants.</p>
+                        <div class="project-meta">
+                            <span><strong>Équipe :</strong> 8 étudiants</span>
+                            <span><strong>Tech :</strong> Three.js · GraphQL</span>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== ALUMNI ===== -->
+        <section class="section section--dark" id="alumni">
+            <div class="container">
+                <div class="section-header reveal">
+                    <div class="section-header-text">
+                        <span class="eyebrow">Alumni</span>
+                        <h2 style="color:var(--cream);">Ils ont fait l'EFREI.<br><em style="color:var(--yellow);font-family:var(--font-serif);font-style:italic;font-weight:300;text-transform:lowercase;">Ils racontent.</em></h2>
+                    </div>
+                </div>
+
+                <div class="temoignage-grid">
+                    <div class="temoignage-card reveal">
+                        <p>Les profs intervenants étaient en poste chez Critéo, Doctolib ou Société Générale. On parlait du métier réel. Quand j'ai commencé chez Datadog, j'avais déjà la moitié des réflexes.</p>
+                        <div class="testimonial-author" style="justify-content:flex-start;">
+                            <div class="testimonial-avatar" style="background:var(--yellow);color:var(--blue-900);">TN</div>
+                            <div class="testimonial-author-info">
+                                <strong style="color:var(--cream);">Thomas Nguyen</strong>
+                                <span style="color:rgba(250,250,247,0.6);">Promo 2021 · SRE, Datadog</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="temoignage-card reveal">
+                        <p>J'ai monté ma boîte deux ans après la sortie. Le réseau alumni m'a donné mes trois premiers clients. Et mon associé, je l'avais rencontré en TP de réseaux en deuxième année.</p>
+                        <div class="testimonial-author" style="justify-content:flex-start;">
+                            <div class="testimonial-avatar" style="background:var(--yellow);color:var(--blue-900);">MK</div>
+                            <div class="testimonial-author-info">
+                                <strong style="color:var(--cream);">Mariam Kone</strong>
+                                <span style="color:rgba(250,250,247,0.6);">Promo 2019 · CTO, Stellaris.io</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== CTA ===== -->
+        <section class="cta-band">
+            <div class="cta-band-content">
+                <h2>Venez visiter<br><em>le campus.</em></h2>
+                <p style="font-size:1.1rem;margin:1.5rem 0 2rem;opacity:0.7;max-width:400px;">
+                    Portes ouvertes, ateliers, immersions : découvrez le campus de l'intérieur.
+                </p>
+                <div class="hero-actions">
+                    <a href="contact.html" class="btn btn-primary">S'inscrire à la JPO <span class="btn-arrow">→</span></a>
+                    <a href="formations.html" class="btn btn-outline">Nos formations</a>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="site-footer">
+        <div class="footer-top">
+            <div class="footer-brand">
+                <h3>EFREI ·<br><em>Informatique.</em></h3>
+                <p>30-32 avenue de la République<br>94800 Villejuif · Île-de-France</p>
+            </div>
+
+            <div class="footer-col">
+                <h5>Navigation</h5>
+                <ul>
+                    <li><a href="index.html">Accueil</a></li>
+                    <li><a href="formations.html">Formations</a></li>
+                    <li><a href="equipe.html">Équipe</a></li>
+                    <li><a href="vie-campus.html">Vie de campus</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="apropos.html">À propos</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h5>Notre projet</h5>
+                <ul>
+                    <li><a href="https://github.com/arthurwrgin/projet_progweb_efrei" rel="noopener">GitHub</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <span>© <span id="current-year">2026</span> EFREI Paris · Université Panthéon-Assas</span>
+            <span>Projet pédagogique TI402 — <a href="apropos.html">À propos</a></span>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
